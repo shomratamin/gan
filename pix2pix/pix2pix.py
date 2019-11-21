@@ -25,7 +25,7 @@ class Pix2Pix():
     def __init__(self):
         # Input shape
         self.img_rows = 32
-        self.img_cols = 256
+        self.img_cols = 512
         self.channels = 3
         self.img_shape = (self.img_rows, self.img_cols, self.channels)
 
@@ -37,7 +37,7 @@ class Pix2Pix():
 
         # Calculate output shape of D (PatchGAN)
         patch = int(self.img_rows / 2**4)
-        self.disc_patch = (2, 16, 1)
+        self.disc_patch = (2, 32, 1)
 
         # Number of filters in the first layer of G and D
         self.gf = 64
@@ -76,7 +76,7 @@ class Pix2Pix():
         print('valid', valid.shape)
         print('fake a', fake_A.shape)
         self.combined = Model(inputs=[img_A, img_B], outputs=[valid, fake_A])
-        # self.combined.load_weights('saved_model/full_5.h5')
+        self.combined.load_weights('saved_model/full_10.h5')
         self.combined.compile(loss=['mse', 'mae'],
                               loss_weights=[1, 100],
                               optimizer=optimizer)
@@ -210,7 +210,7 @@ class Pix2Pix():
                 if batch_i % sample_interval == 0:
                     self.sample_images(epoch, batch_i)
 
-            if epoch % 5 == 0:
+            if epoch % 1 == 0:
                 self.save_models(epoch)
 
 

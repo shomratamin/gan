@@ -23,7 +23,7 @@ def resize_scaled(image, height = 32):
     image = cv2.resize(image,(new_width,height),interpolation=cv2.INTER_CUBIC)
     return image
 
-def chop_or_pad(image, width = 256, height = 32):
+def chop_or_pad(image, width = 512, height = 32):
     h, w = image.shape[:2]
     if h != height:
         image = resize_scaled(image,height)
@@ -43,7 +43,7 @@ def build_generator():
     """U-Net Generator"""
     gf = 64
     channels = 3
-    img_shape = (32,256,channels)
+    img_shape = (32,512,channels)
 
 
     def conv2d(layer_input, filters, f_size=4, bn=True,stride=2,dropout_rate=0):
@@ -95,7 +95,7 @@ def build_generator():
     return Model(d0, output_img)
 
 
-weights_path = 'saved_model/gen_10.h5'
+weights_path = 'saved_model/gen_5.h5'
 generator = build_generator()
 generator.load_weights(weights_path)
 
@@ -106,10 +106,10 @@ images.extend(glob('test/*.png'))
 t1 = time()
 for i, _image in enumerate(images):
     print(_image)
-    image = cv2.imread(_image)
-    image = cv2.cvtColor(image,cv2.COLOR_BGR2RGB)
+    __image = cv2.imread(_image)
+    image = cv2.cvtColor(__image.copy(),cv2.COLOR_BGR2RGB)
     # image = cv2.GaussianBlur(image,(9,9),0)
-    image = cv2.blur(image,(7,7))
+    image = cv2.blur(image,(3,3))
     image = chop_or_pad(image)
     input_images = []
     input_images.append(image)
@@ -121,10 +121,13 @@ for i, _image in enumerate(images):
     output_image = output_image[0]
     output_image = cv2.cvtColor(output_image,cv2.COLOR_RGB2BGR)
 
-    output_tile = np.zeros((64,256,3))
+    output_tile = np.zeros((64,512,3))
     output_tile[:32,:,:] = image
     output_tile[32:,:,:] = output_image
     # print(output_image)
-    cv2.imwrite(f'out/{i}.jpg', output_tile)
+    # cv2.imwrite(f'out/{i}.jpg', output_tile)
+    cv2.imwrite(f'out/gt/{i}.jpg', __image)
+    cv2.imwrite(f'out/gen/{i}.jpg', output_image)
+
 
 print('time taken',time() - t1)

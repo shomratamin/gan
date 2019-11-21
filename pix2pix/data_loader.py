@@ -72,6 +72,7 @@ class DataLoader():
     def load_batch(self, batch_size=1, is_testing=False):
         gt_path = glob('{}/train/gt/*.png'.format(self.dataset_name))
         gt_path.extend(glob('{}/train/gt/*.jpg'.format(self.dataset_name)))
+        # print(gt_path)
         random.shuffle(gt_path)
         pairs = []
         for f in gt_path:
