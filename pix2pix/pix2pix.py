@@ -43,7 +43,7 @@ class Pix2Pix():
         self.gf = 64
         self.df = 64
 
-        optimizer = Adam(0.0002, 0.5)
+        optimizer = Adam(0.00001, 0.5)
 
         # Build and compile the discriminator
         self.discriminator = self.build_discriminator()
@@ -76,7 +76,7 @@ class Pix2Pix():
         print('valid', valid.shape)
         print('fake a', fake_A.shape)
         self.combined = Model(inputs=[img_A, img_B], outputs=[valid, fake_A])
-        self.combined.load_weights('saved_model/full_10.h5')
+        self.combined.load_weights('saved_model/full_0.h5')
         self.combined.compile(loss=['mse', 'mae'],
                               loss_weights=[1, 100],
                               optimizer=optimizer)
@@ -241,4 +241,4 @@ class Pix2Pix():
 
 if __name__ == '__main__':
     gan = Pix2Pix()
-    gan.train(epochs=200, batch_size=1, sample_interval=200)
+    gan.train(epochs=200, batch_size=32, sample_interval=20)

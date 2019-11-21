@@ -95,7 +95,7 @@ def build_generator():
     return Model(d0, output_img)
 
 
-weights_path = 'saved_model/gen_5.h5'
+weights_path = 'saved_model/gen_0.h5'
 generator = build_generator()
 generator.load_weights(weights_path)
 
@@ -125,9 +125,9 @@ for i, _image in enumerate(images):
     output_tile[:32,:,:] = image
     output_tile[32:,:,:] = output_image
     # print(output_image)
-    # cv2.imwrite(f'out/{i}.jpg', output_tile)
-    cv2.imwrite(f'out/gt/{i}.jpg', __image)
-    cv2.imwrite(f'out/gen/{i}.jpg', output_image)
+    cv2.imwrite(f'out/{i}.jpg', output_tile)
+    # cv2.imwrite(f'out/gt/{i}.jpg', __image)
+    # cv2.imwrite(f'out/gen/{i}.jpg', output_image)
 
 
 print('time taken',time() - t1)
